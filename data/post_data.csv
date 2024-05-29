@@ -1,0 +1,3 @@
+pk,post_id,username,hashtag,comment_count,like_count,caption_text,post_date
+1,1,test-user,daily,13,10000000000,hello world,2023-10-19
+2,2,test-user2,daily,10000000,100,hello world,2023-10-19
