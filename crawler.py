@@ -1,9 +1,8 @@
 import time
 import uuid
 import urllib.request
-from datetime import datetime
 from smtp_setting import send_email
-def crawler(hashtag_word,cl):
+def crawler(hashtag_word, cl):
     hash_keyword = hashtag_word
 
     hashtag = cl.hashtag_info(hash_keyword)  # 해시태그 건수
