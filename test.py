@@ -1,5 +1,30 @@
 import tensorflow as tf
 
+# Step 1: Create an initial dataset and a MapDataset
+initial_dataset = tf.data.Dataset.from_tensor_slices([1, 2, 3, 4, 5])
+
+print(type(initial_dataset))
+def map_fn(x):
+    return x * 2  # Example transformation
+
+map_dataset = initial_dataset.map(map_fn)
+
+print(type(map_dataset))
+
+# Step 2: Iterate through the MapDataset and collect the elements
+elements = []
+
+for element in map_dataset:
+    elements.append(element)
+
+eager_tensor = tf.stack(elements)
+
+# Print the resulting EagerTensor
+print(type(eager_tensor))  # Should output something like tf.Tensor([ 2  4  6  8 10], shape=(5,), dtype=int32)
+
+
+
+exit()
 # 데이터 준비
 data_4d = tf.constant([[[[1, 2], [3, 4]], [[5, 6], [7, 8]]],
                       [[[9, 10], [11, 12]], [[13, 14], [15, 16]]]])

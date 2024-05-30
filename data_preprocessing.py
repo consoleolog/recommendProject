@@ -53,7 +53,6 @@ train_ds = tf.keras.preprocessing.image_dataset_from_directory(
     seed=123,
     validation_split=0.2,
 )
-
 #print(train_ds) # <_PrefetchDataset element_spec=(TensorSpec(shape=(None, 128, 128, 3), dtype=tf.float32, name=None), TensorSpec(shape=(None,), dtype=tf.int32, name=None))>
 
 # for i, answer in train_ds.take(1):
@@ -67,7 +66,17 @@ def normalize(i, answer):
 # 노멀라이징 필수임
 train_ds = train_ds.map(normalize)
 print(train_ds) # <_MapDataset element_spec=(TensorSpec(shape=(None, 128, 128, 3), dtype=tf.float32, name=None), TensorSpec(shape=(None,), dtype=tf.int32, name=None))>
+elements = []
 
+for i, data in train_ds.take(1):
+    print(i)
+    print(data)
+
+
+
+
+print(type(train_ds))
+exit()
 input_data = []
 for i, rows in result.iterrows():
     input_data.append(

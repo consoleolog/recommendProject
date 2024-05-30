@@ -3,6 +3,7 @@ import numpy as np
 import tensorflow as tf
 import shutil
 import os
+from PIL import Image
 
 post_data = pd.read_csv('./data/post_data.csv')
 user_data = pd.read_csv('./data/user_data.csv')
@@ -52,7 +53,6 @@ train_ds = tf.keras.preprocessing.image_dataset_from_directory(
     validation_split=0.2,
 )
 
-
 def normalize(i, answer):
     i = tf.cast(i / 255.0, tf.float32)
     return i, answer
@@ -92,24 +92,6 @@ username_indices = username_string_lookup_layer(result['username'])
 username_embedded = embedding(username_indices)
 
 
-print(type(username_embedded))
-print(type(input_data))
-print(type(hashtag_one_hot))
-
-
-dataset1 = tf.data.Dataset.from_tensor_slices(username_embedded)
-dataset2 = tf.data.Dataset.from_tensor_slices(input_data)
-dataset3 = tf.data.Dataset.from_tensor_slices(hashtag_one_hot)
-map_dataset1 = dataset3.map(lambda x:x+1)
-map_dataset2 = dataset3.map(lambda x:x+1)
-map_dataset3 = dataset3.map(lambda x:x+1)
-print(type(map_dataset1))
-print(type(map_dataset2))
-print(type(map_dataset3))
-
-combined_dataset = tf.data.Dataset.zip((dataset1, dataset2, dataset3))
-print(type(combined_dataset))
-
 
 Username_Input = tf.keras.Input(shape=(2, 2))
 Username_Output = tf.keras.layers.Dense(32, activation='relu')(Username_Input)
@@ -143,10 +125,10 @@ model = tf.keras.models.Model(inputs=[Username_Input, Number_Input, Hashtag_Inpu
 model.summary()
 model.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy'])
 
-X_data = [map_dataset1, map_dataset2, map_dataset3, train_ds]
+X_data = [train_ds]
 Y_data = result['label'].values
-Y_data = tf.data.Dataset.from_tensor_slices(Y_data)
-map_Y_data = Y_data.map(lambda x:x+1)
+# Y_data = tf.data.Dataset.from_tensor_slices(Y_data)
+# map_Y_data = Y_data.map(lambda x:x+1)
 
 es = tf.keras.callbacks.EarlyStopping(
     monitor='accuracy',
@@ -154,6 +136,6 @@ es = tf.keras.callbacks.EarlyStopping(
     mode='max',
 )
 
-model.fit(x=X_data, y=map_Y_data, epochs=100, callbacks=[es], batch_size=32)
+model.fit(x=np.array(X_data, dtype=object), y=Y_data, epochs=100, callbacks=[es], batch_size=32)
 
 model.save('./saved_models/model1.h5')
